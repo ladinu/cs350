@@ -1,0 +1,62 @@
+I wrote the following Python program to generate graphs from a given adjacency
+matrix (it uses dot to generate graphs). 
+
+#!/usr/bin/env python
+import pydot as dot
+
+def genGraph(matrix):
+   graph = dot.Dot(graph_type='digraph')
+   nodes = []
+   for row_idx, row in enumerate(matrix):
+      node = dot.Node("%i" % row_idx)
+      graph.add_node(node)
+      nodes.append(node)
+
+   for row_idx, row in enumerate(matrix):
+      for column_idx, element in enumerate(row):
+         if element:
+            graph.add_edge(dot.Edge(nodes[row_idx], nodes[column_idx]))
+
+   graph.write_png("out.png")
+
+I noticed the following patterns when generating graphs for the given network
+topologies (star, ring, all connected)
+
+   star
+      - All nodes are connected to a single node and none of the nodes has a
+        loop on itself.
+
+      - The matrix would have to have all ones in its first row and first
+        column expect for the very first element. For example, It would look
+        like this for a 3 by 3 matrix
+
+              [0, 1, 1]
+              [1, 0, 0]
+              [1, 0, 0]
+               
+        and like this for a n by n matrix:
+
+              [0, 1, 1, ..., 1]
+              [1, 0, 0, ..., 0]
+              [1, 0, 0, ..., 0]
+              [., 0, 0, ..., 0]
+              [., 0, 0, ..., 0]
+              [., 0, 0, ..., 0]
+              [1, 0, 0, ..., 0]
+
+      - Essentally, algorithm would have to check if the first row and column
+        contain all 1s (execpt for the first element) and the rest are 0s.
+
+      - This is the bruteforce algorithm that check if a n by n adjacency
+        matrix represent a star network:
+
+         if A[1, 1] = 1 then return false
+         for i=2 to n do
+            if A[1, i] \= 1 then return false
+            if A[i, 1] \= 1 then return false
+            for j=2 to n do
+              if A{i, j} \= 0 then return false 
+         return true
+
+   ring
+      - 
