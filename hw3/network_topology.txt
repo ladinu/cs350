@@ -1,3 +1,5 @@
+Question 1
+-------------------------------------------------------------------------------
 I wrote the following Python program to generate graphs from a given adjacency
 matrix (it uses dot to generate graphs). 
 
@@ -161,3 +163,475 @@ toplogy
          return ALL_CONNECTED
       else
          return UNKNOWN
+
+Question 4
+_______________________________________________________________________________
+
+- This is my implementation of Johnson-Trotter algorithm in Python:
+
+      #!/usr/bin/env python
+      from sys import argv
+
+      LEFT = 'left'
+      RIGHT = 'right'
+
+      class Element:
+         def __init__(self, value, direction):
+            self.value = value;
+            self.direction = direction
+
+         def __repr__(self):
+            direction = ''
+            if self.direction == LEFT:
+               direction = "<-"
+            else:
+               direction = "->"
+            return "{%i %s}" % (self.value, direction)
+
+         def reverseDirection(self):
+            if self.direction == LEFT:
+               self.direction = RIGHT
+            else:
+               self.direction = LEFT
+
+      class Permutation:
+         def __init__(self):
+            self.array = []
+            self.length = 0
+
+         def __repr__(self):
+            ret = "[ "
+            for i in self.array:
+               ret += str(i)
+               ret += " "
+            return ret + "]"
+
+         def push(self, element):
+            self.array.append(element)
+            self.length += 1
+            assert self.length == len(self.array)
+
+         def get(self, index):
+            return self.array[index]
+
+
+         def pushTo(self, targetArray):
+            elements = ''
+            for i in self.array:
+               elements += str(i.value)
+            targetArray.append(elements)
+
+         def toInt(self):
+            elements = ''
+            for i in self.array:
+               elements += str(i.value)
+            return int(elements)
+
+         # Check if elemnt at given index is mobile by seeing if the
+         # element that its pointing to is smaller. Will return a boolean
+         def isMobile(self, index):
+            element = self.array[index]
+            adjElement_index = index
+
+            if element.direction == LEFT:
+               adjElement_index = index - 1
+            else:
+               adjElement_index = index + 1
+
+            # If the arrow point off index, by definition
+            # the element is not mobile
+            if (adjElement_index < 0) or (adjElement_index >= self.length):
+               return False
+
+            adjElement = self.array[adjElement_index]
+
+            # Current element is only mobile if its bigger than the 
+            # elemnt that it is pointing to
+            return element.value > adjElement.value
+
+         def hasMobileElement(self):
+            for index, element in enumerate(self.array):
+               if self.isMobile(index):
+                  return True
+            return False
+
+         # Does a linear search through the internal array to find
+         # the largest mobile element. If such element was found
+         # the index will be returned, else -1 will be reutned
+         def largestMobile(self):
+            if self.length < 2:
+               return -1
+
+            largestElement = Element(-1, LEFT)
+            largestElementIndex = -1
+
+            for index, element in enumerate(self.array):
+               if self.isMobile(index):
+                  if element.value > largestElement.value:
+                     largestElement = element
+                     largestElementIndex = index
+
+            return largestElementIndex
+
+         def swap(self, i, j):
+            arr = self.array
+            arr[i], arr[j] = arr[j], arr[i]
+
+         def reverseElements(self, k):
+            element = self.array[k]
+            for i in self.array:
+               if i.value > element.value:
+                  i.reverseDirection()
+
+
+      # Convert a given number to a list of elements
+      # Each element has a value and a direction where
+      # the arrow point to. Initially, they will all
+      # point to the left 
+      def init_perm(n):
+         permutation = Permutation()
+         i = 0
+         while i < n:
+            permutation.push(Element(i+1, LEFT))
+            i += 1
+
+         return permutation
+
+
+      def johnsonTrotterPrint(n):
+         lastPermutaion = init_perm(n)
+         print lastPermutaion.toInt()
+
+         while lastPermutaion.hasMobileElement():
+            lastPermutaion = johnsonTrotterCore(lastPermutaion)
+            if not lastPermutaion:
+               break
+            print lastPermutaion.toInt()
+
+      def johnsonTrotter(n):
+         permutationList = []
+         lastPermutaion = init_perm(n)
+         lastPermutaion.pushTo(permutationList)
+
+         while lastPermutaion.hasMobileElement():
+            lastPermutaion = johnsonTrotterCore(lastPermutaion)
+            if not lastPermutaion:
+               break
+            lastPermutaion.pushTo(permutationList)
+
+         return permutationList
+
+      def johnsonTrotterCore(permutation):
+            # Find index of largest mobile element
+            k = permutation.largestMobile()
+            if k < 0:
+               return False
+            # Swap largest mobile with its adjacent 
+            # element pointed by the arrow
+            element = permutation.get(k)
+            adjElement_index = k
+
+            if element.direction == LEFT:
+               adjElement_index = k - 1
+            else:
+               adjElement_index = k + 1
+
+            permutation.swap(k, adjElement_index)
+            # We just swapped this, so index must change
+            k = adjElement_index
+
+            # Reverse the direction of all alements that are
+            # larger than k
+            permutation.reverseElements(k)
+            return permutation
+
+      if __name__ == '__main__':
+         johnsonTrotterPrint(int(argv[1]))
+
+- See Appedndix A for the unittests for the abouve program. Also see appendix B
+  for the results of the unittests.
+
+- For the tests that check (a) no duplicate permutations are generated and (b)
+  exactly n! permutations are generated, I used the following bash script:
+
+   
+      #!/bin/bash
+
+      function Error() {
+         echo "ERROR: $1";
+      }
+
+      function Info() {
+         echo "> $1";
+      }
+
+      function hasDuplicates() {
+         duplicateCount=`sort $1 | uniq -d | wc -l |tr -d ' '`;
+         if [ "0" = $duplicateCount ]; then
+            echo "NO";
+         else
+            echo "YES";
+         fi
+      }
+
+      function checkForDuplicates() {
+         for i in `seq 1 10`; do
+            status=`hasDuplicates perms/$i.txt`
+            if [ $status = "YES" ]; then
+               Error "File perms/$i.txt contain duplicate permutations";
+            else
+               Info "File perms/$i.txt contain no duplicate permutations";
+            fi
+         done
+      }
+
+      function fac() {
+         echo "define f(x) {if (x>1){return x*f(x-1)};return 1}
+                 f($1)" | bc
+      }
+
+      function checkNFactorial() {
+         for i in `seq 1 10`; do
+            if [ `wc -l < perms/$i.txt |tr -d ' '` != `fac $i` ]; then
+               Error "perms/$i.txt does not contain `fac $i` permutations";
+            else
+               Info "perms/$i.txt contain `fac $i` permutations";
+            fi
+         done
+      }
+
+      function generateTestFiles() {
+         if [ ! -d "./perms" ]; then
+            mkdir "./perms";
+         fi
+
+         for i in `seq 1 10`; do
+            Info "Generating permutation file $i.txt";
+            python permute.py $i > "perms/$i.txt";
+         done
+      }
+
+      function main() {
+         generateTestFiles
+         checkForDuplicates
+         checkNFactorial
+      }
+      main
+
+- The above bash script is expected to run in the same diredectory as the
+  python program. The bash script first execute the python program and generate
+  ten text files that contain permutations of 1, 2, 3, ..., 10 in the perms/
+  directory. 
+
+- The bash script use UNIX tools sort, uniq, wc and others to check that the
+  generated permutation files contain no duplicate permutations (i.e no
+  duplicate lines)
+
+- The script also check that there are n! number of lines for each file in
+  perms/ directory
+
+- Following is the output of running the bash test script agains the python
+  program 
+
+        hw3 git:(master) ✗ ./test.sh
+         > Generating permutation file 1.txt
+         > Generating permutation file 2.txt
+         > Generating permutation file 3.txt
+         > Generating permutation file 4.txt
+         > Generating permutation file 5.txt
+         > Generating permutation file 6.txt
+         > Generating permutation file 7.txt
+         > Generating permutation file 8.txt
+         > Generating permutation file 9.txt
+         > Generating permutation file 10.txt
+         > File perms/1.txt contain no duplicate permutations
+         > File perms/2.txt contain no duplicate permutations
+         > File perms/3.txt contain no duplicate permutations
+         > File perms/4.txt contain no duplicate permutations
+         > File perms/5.txt contain no duplicate permutations
+         > File perms/6.txt contain no duplicate permutations
+         > File perms/7.txt contain no duplicate permutations
+         > File perms/8.txt contain no duplicate permutations
+         > File perms/9.txt contain no duplicate permutations
+         > File perms/10.txt contain no duplicate permutations
+         > perms/1.txt contain 1 permutations
+         > perms/2.txt contain 2 permutations
+         > perms/3.txt contain 6 permutations
+         > perms/4.txt contain 24 permutations
+         > perms/5.txt contain 120 permutations
+         > perms/6.txt contain 720 permutations
+         > perms/7.txt contain 5040 permutations
+         > perms/8.txt contain 40320 permutations
+         > perms/9.txt contain 362880 permutations
+         > perms/10.txt contain 3628800 permutations
+
+
+
+[ Appendix A ]
+-------------------------------------------------------------------------------
+
+      import unittest
+      from johnsonTrotter import *
+
+      class JohnsonTrotter(unittest.TestCase):
+
+         def test_empty_Permutation(self):
+            pl = Permutation()
+            self.assertEqual(pl.array, [])
+            self.assertEqual(pl.length, 0)
+
+         def test_Permutation_push(self):
+            pl = Permutation()
+            self.assertEqual(pl.array, [])
+            self.assertEqual(pl.length, 0)
+            pl.push(Element(1, LEFT))
+            self.assertEqual(pl.length, 1)
+
+         def test_Permutation_isMobile_1(self):
+            pl = Permutation()
+            pl.push(Element(1, LEFT))
+            self.assertFalse(pl.isMobile(0))
+
+         def test_Permutation_isMobile_2(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            self.assertFalse(pl.isMobile(0))
+
+         def test_Permutation_isMobile_3(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            pl.push(Element(2, LEFT))
+            self.assertTrue(pl.isMobile(1))
+
+         def test_Permutation_isMobile_4(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            pl.push(Element(2, RIGHT))
+            self.assertFalse(pl.isMobile(1))
+
+         def test_Permutation_largestMobile_empty(self):
+            pl = Permutation()
+            lm = pl.largestMobile()
+            self.assertEqual(lm, -1)
+
+         def test_Permutation_largestMobile_1(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            lm = pl.largestMobile()
+            self.assertEqual(lm, -1)
+
+         def test_Permutation_largestMobile_2(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            pl.push(Element(2, RIGHT))
+            self.assertEqual(pl.largestMobile(), -1)
+
+         def test_Permutation_swap(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            pl.push(Element(2, RIGHT))
+
+            self.assertEqual(pl.get(1).value, 2)
+            pl.swap(0, 1)
+            self.assertEqual(pl.get(1).value, 1)
+
+         def test_Permutation_reverse(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            pl.push(Element(2, RIGHT))
+            pl.reverseElements(0)
+            self.assertEqual(pl.get(1).direction, LEFT)
+
+         def test_Permutation_hasMobileElement(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            pl.push(Element(2, LEFT))
+            self.assertTrue(pl.hasMobileElement())
+            pl.get(1).reverseDirection()
+            self.assertFalse(pl.hasMobileElement())
+
+         def test_Permutation_get(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            self.assertEqual(pl.get(0).value, 1)
+
+         def test_Permutation_pushTo_empty(self):
+            pl = Permutation()
+            perms = []
+            pl.pushTo(perms)
+            self.assertEqual(perms[0], '')
+
+         def test_Permutation_pushTo_1(self):
+            pl = Permutation()
+            pl.push(Element(1, RIGHT))
+            perms = []
+            pl.pushTo(perms)
+            self.assertEqual(len(perms), 1)
+            self.assertEqual(perms[0], '1')
+
+         def test_Permutation_pushTo_2(self):
+            pl = Permutation()
+            perms = []
+            pl.push(Element(1, RIGHT))
+            pl.pushTo(perms)
+            pl.push(Element(2, LEFT))
+            pl.pushTo(perms)
+            self.assertEqual(len(perms), 2)
+
+            self.assertEqual(perms[0], '1')
+            self.assertEqual(perms[1], '12')
+
+         def test_Element(self):
+            e = Element(1, LEFT)
+            self.assertEqual(e.value, 1)
+            e = Element(1, RIGHT)
+            self.assertEqual(e.direction, RIGHT)
+
+         def test_Element_reverse(self):
+            e = Element(1, RIGHT)
+            self.assertEqual(e.direction, RIGHT)
+            e.reverseDirection()
+            self.assertEqual(e.direction, LEFT)
+
+         def test_initPerm_empty(self):
+            pl = init_perm(0)
+            self.assertEqual(pl.length, 0)
+
+         def test_initPerm_one(self):
+            pl = init_perm(1)
+            self.assertEqual(pl.length, 1)
+
+         def test_initPerm_two(self):
+            pl = init_perm(2)
+            self.assertEqual(pl.length, 2)
+
+         def test_JohnsonTrotter_empty(self):
+            permutations = johnsonTrotter(0)
+            self.assertEqual(permutations, [''])
+            permutations = johnsonTrotter(-1)
+            self.assertEqual(permutations, [''])
+
+         def test_JohnsonTrotter_1(self):
+            permutations = johnsonTrotter(1)
+            self.assertEqual(len(permutations), 1)
+
+         def test_JohnsonTrotter_2(self):
+            permutations = johnsonTrotter(2)
+            self.assertEqual(len(permutations), 2)
+
+         def test_JohnsonTrotter_3(self):
+            permutations = johnsonTrotter(3)
+            self.assertEqual(len(permutations), 6)
+
+      if __name__ == '__main__':
+          unittest.main()
+
+[ Appendix B ]
+-------------------------------------------------------------------------------
+
+      python johnsonTrotter_test.py
+      .........................
+      ----------------------------------------------------------------------
+      Ran 25 tests in 0.002s
+
+      OK
