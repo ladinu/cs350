@@ -55,7 +55,7 @@ topologies (star, ring, all connected)
                 if A[1, i] \= 1 then return false
                 if A[i, 1] \= 1 then return false
                 for j=2 to n do
-                  if A{i, j} \= 0 then return false 
+                  if A[i, j] \= 0 then return false 
              return true
 
    ring
@@ -90,5 +90,74 @@ topologies (star, ring, all connected)
                   else
                      if A[i, j] \= 0 then return false
             return true
+
+   all connected
+      - As name implies, all the nodes are connected to each other. Each node
+        will have n incomming edges. Beacuse none of the nodes are connected to
+        itself, the diagonal of the adjacency matrix will all be 0s.
+
+      - Beacuse all nodes are connected (execpt node to itself), the adjacency
+        matrix will be filled with 1s execpt for the diagnoals. Matrix look
+        like this for a 4 by 4 matrix
                      
+             [0, 1, 1, 1]
+             [1, 0, 1, 1]
+             [1, 1, 0, 1]
+             [1, 1, 1, 0]
               
+
+      - The algorithm for checking if all alements of the adjacency matrix are
+        1s execpt for the diagnoals is the following
+
+            for i=1 to n do
+               for j=1 to n do
+                  if j == i then
+                     if A[i, j] \= 0 then return false
+                  else
+                     if A[i, j] \= 1 then reutrn false
+            return true
+
+By combining all the algorithms given above, the following algorithm check if a
+given n by n adjacency matrix represnt a star, ring or all connetcted network
+toplogy
+
+   // Input: A matrix A[1...n, 1...n] of booleans (1 or 0)
+   // Output: Type of the network toplogy STAR, RING, ALL_CONNECTED, UNKNOWN
+   function TOPOLOGY_TYPE( A[1...n, 1..n] )
+
+      subroutine IS_STAR:
+         if A[1, 1] = 1 then return false
+         for i=2 to n do
+            if A[1, i] \= 1 then return false
+            if A[i, 1] \= 1 then return false
+            for j=2 to n do
+               if A[i, j] \= 0 then return false 
+         return true 
+
+      subroutine IS_RING:
+         for i=1 to n do
+            for j=1 to n do
+               if j == ((i+1) % n) then 
+                  if A[i, j] \= 1 then return false
+               else
+                  if A[i, j] \= 0 then return false
+         return true
+
+
+      subroutine IS_ALL_CONNECTED:
+         for i=1 to n do
+            for j=1 to n do
+               if j == i then
+                  if A[i, j] \= 0 then return false
+               else
+                  if A[i, j] \= 1 then reutrn false
+            return true
+
+      if IS_STAR then
+         return STAR
+      else if IS_RING then
+         return RING
+      else if IS_ALL_CONNECTED then
+         return ALL_CONNECTED
+      else
+         return UNKNOWN
