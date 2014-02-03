@@ -1,0 +1,6 @@
+
+
+function isRing <- A[[0...n]] 
+   for i=0 to n-1 do
+      for j=2 to n:q
+         
