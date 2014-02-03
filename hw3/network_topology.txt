@@ -50,13 +50,45 @@ topologies (star, ring, all connected)
       - This is the bruteforce algorithm that check if a n by n adjacency
         matrix represent a star network:
 
-         if A[1, 1] = 1 then return false
-         for i=2 to n do
-            if A[1, i] \= 1 then return false
-            if A[i, 1] \= 1 then return false
-            for j=2 to n do
-              if A{i, j} \= 0 then return false 
-         return true
+             if A[1, 1] = 1 then return false
+             for i=2 to n do
+                if A[1, i] \= 1 then return false
+                if A[i, 1] \= 1 then return false
+                for j=2 to n do
+                  if A{i, j} \= 0 then return false 
+             return true
 
    ring
-      - 
+      - In this type of network, the first node is connected to the second node
+        and second node is connected to the third node and so on until last
+        node is connected to the first node.
+
+      - The adjacency matrix representation of this graph look like this for a
+        3 by 3 matrix,
+
+              [0, 1, 0]
+              [0, 0, 1]
+              [1, 0, 0]
+
+        like this for a 4 by 4 matrix, 
+
+              [0, 1, 0, 0]
+              [0, 0, 1, 0]
+              [0, 0, 0, 1]
+              [1, 0, 0, 0]
+
+        this pattern continues on for a n by n matrix
+
+      - The following algorithm that check for a ring network. It check if all
+        elements are 0 execpt for first element of the last row and each i+1
+        element in i'th row.
+
+            for i=1 to n do
+               for j=1 to n do
+                  if j == ((i+1) % n) then 
+                     if A[i, j] \= 1 then return false
+                  else
+                     if A[i, j] \= 0 then return false
+            return true
+                     
+              
