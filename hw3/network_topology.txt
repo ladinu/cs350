@@ -542,7 +542,9 @@ _______________________________________________________________________________
     not contain any left nodes i.e the input list is already sorted from smallest
     to largest. In this case, the binary search tree is just a fancy linked list.
     Now, finding the greatest key turns into a sequential search with the largest
-    element being the last eelement in the linked list.
+    element being the last element in the linked list. Beacuse the worst case
+    time effciency of sequential search is O(n), the worst case for the algorithm
+    in part (a) is also O(n).
 
 
 [ Appendix A ]
