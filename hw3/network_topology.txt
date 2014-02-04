@@ -1,3 +1,8 @@
+// Ladinu Chandrasinghe
+// CS350 Winter 2014 HW 3
+
+
+
 Question 1
 _______________________________________________________________________________
 
@@ -47,10 +52,10 @@ topologies (star, ring, all connected)
               [., 0, 0, ..., 0]
               [1, 0, 0, ..., 0]
 
-      - Essentally, algorithm would have to check if the first row and column
-        contain all 1s (execpt for the first element) and the rest are 0s.
+      - Essentially, algorithm would have to check if the first row and column
+        contain all 1s (expect for the first element) and the rest are 0s.
 
-      - This is the bruteforce algorithm that check if a n by n adjacency
+      - This is the brute force algorithm that check if a n by n adjacency
         matrix represent a star network:
 
              if A[1, 1] = 1 then return false
@@ -61,7 +66,7 @@ topologies (star, ring, all connected)
                   if A[i, j] \= 0 then return false 
              return true
 
-      - The time effciency of this algorithm O(n^2). This is beacuse the
+      - The time efficiency of this algorithm O(n^2). This is because the
         algorithm has 2 for loops and the second for loop is nested inside the
         first. 
 
@@ -87,7 +92,7 @@ topologies (star, ring, all connected)
         this pattern continues on for a n by n matrix
 
       - The following algorithm that check for a ring network. It check if all
-        elements are 0 execpt for first element of the last row and each i+1
+        elements are 0 except for first element of the last row and each i+1
         element in i'th row.
 
             for i=1 to n do
@@ -98,18 +103,18 @@ topologies (star, ring, all connected)
                      if A[i, j] \= 0 then return false
             return true
 
-      - The time effciency of this algorithm is clearly O(n^2). The algorithm
+      - The time efficiency of this algorithm is clearly O(n^2). The algorithm
         has two for loops, one nested inside the other. There are 2 basic
-        operations (comparision) for each iteration. This operation is executed
+        operations (comparison) for each iteration. This operation is executed
         2n^2 times. Hence the algorithm is O(n^2)
 
    all connected
       - As name implies, all the nodes are connected to each other. Each node
-        will have n incomming edges. Beacuse none of the nodes are connected to
+        will have n incoming edges. Because none of the nodes are connected to
         itself, the diagonal of the adjacency matrix will all be 0s.
 
-      - Beacuse all nodes are connected (execpt node to itself), the adjacency
-        matrix will be filled with 1s execpt for the diagnoals. Matrix look
+      - because all nodes are connected (except node to itself), the adjacency
+        matrix will be filled with 1s except for the diagonals. Matrix look
         like this for a 4 by 4 matrix
                      
              [0, 1, 1, 1]
@@ -118,28 +123,28 @@ topologies (star, ring, all connected)
              [1, 1, 1, 0]
               
 
-      - The algorithm for checking if all alements of the adjacency matrix are
-        1s execpt for the diagnoals is the following
+      - The algorithm for checking if all elements of the adjacency matrix are
+        1s except for the diagonals is the following
 
             for i=1 to n do
                for j=1 to n do
                   if j == i then
                      if A[i, j] \= 0 then return false
                   else
-                     if A[i, j] \= 1 then reutrn false
+                     if A[i, j] \= 1 then return false
             return true
 
-      - The time effciency for this algorithm, like before, is O(n^2). The
-        comparision operation get exectued twice for each iteration and there
+      - The time efficiency for this algorithm, like before, is O(n^2). The
+        comparison operation get executed twice for each iteration and there
         are n^2 iterations. This mean the basic operation get executed 2n^2
         times. Thus the algorithm is O(n^2).
 
 By combining all the algorithms given above, the following algorithm check if a
-given n by n adjacency matrix represnt a star, ring or all connetcted network
-toplogy
+given n by n adjacency matrix represent a star, ring or all connected network
+topology
 
    // Input: A matrix A[1...n, 1...n] of booleans (1 or 0)
-   // Output: Type of the network toplogy STAR, RING, ALL_CONNECTED, UNKNOWN
+   // Output: Type of the network topology STAR, RING, ALL_CONNECTED, UNKNOWN
    function TOPOLOGY_TYPE( A[1...n, 1..n] )
 
       subroutine IS_STAR:
@@ -179,12 +184,23 @@ toplogy
       else
          return UNKNOWN
 
-   - The worst case time effciency for TOPOLOGY_TYPE is going to be the sum of
-     worst case time effciency of all the sub routines. This total is about
-     3n^2. So the worst case time effciency for TOPOLOGY_TYPE is also O(n^2).
+   - The worst case time efficiency for TOPOLOGY_TYPE is going to be the sum of
+     worst case time efficiency of all the sub routines. This total is about
+     3n^2. So the worst case time efficiency for TOPOLOGY_TYPE is also O(n^2).
 
 Question 2
 _______________________________________________________________________________
+
+(a) 
+      function HAS_CYCLE(Vertex)
+         if vertex is marked then return True
+         mark vertex
+         for each neighbor in vertex do
+            if HAS_CYCLE(neighbor) then return True
+         return False
+
+(b) DFS is better because as soon as you visit a vertex that is already marked,
+    you can exit the function and report the graph has a cycle.
 
 
 Question 3
@@ -210,12 +226,12 @@ _______________________________________________________________________________
 - Average case depend on the type of input. For this problem, I will assume the
   input is uniformly distributed.
 
-- Beacuse average case time effciency of sequential search is O(n), on average
+- because average case time efficiency of sequential search is O(n), on average
   it will take about 19000 comparisons to find a key. This number is obtained
-  by summing all the comparision needed for finding each element in 38000
+  by summing all the comparison needed for finding each element in 38000
   element list and dividing them by 38000.
 
-- The average case for binary seach is log2(n). log2(38000) = 15.2 ~= 16 
+- The average case for binary search is log2(n). log2(38000) = 15.2 ~= 16 
 
 - Now 19000 / 16 = 1187.5 ~= 1188. So binary search is 1188 times faster than
   sequential search in the average case.
@@ -404,7 +420,7 @@ _______________________________________________________________________________
       if __name__ == '__main__':
          johnsonTrotterPrint(int(argv[1]))
 
-- See Appedndix A for the unittests for the abouve program. Also see appendix B
+- See Appendix A for the unittests for the above program. Also see appendix B
   for the results of the unittests.
 
 - For the tests that check (a) no duplicate permutations are generated and (b)
@@ -474,7 +490,7 @@ _______________________________________________________________________________
       }
       main
 
-- The above bash script is expected to run in the same diredectory as the
+- The above bash script is expected to run in the same directory as the
   python program. The bash script first execute the python program and generate
   ten text files that contain permutations of 1, 2, 3, ..., 10 in the perms/
   directory. 
@@ -486,7 +502,7 @@ _______________________________________________________________________________
 - The script also check that there are n! number of lines for each file in
   perms/ directory
 
-- Following is the output of running the bash test script agains the python
+- Following is the output of running the bash test script against the python
   program 
 
         hw3 git:(master) ✗ ./test.sh
@@ -540,12 +556,14 @@ _______________________________________________________________________________
 
 (b) Yes. In each iteration, search space is halved
 
-(c) On the average case the time effciency is O(h) where h is the height of the
-    tree. This is beacuse the algorithm has to always travel to the right most
+(c) On the average case the time efficiency is O(h) where h is the height of the
+    tree. This is because the algorithm has to always travel to the right most
     end of the tree to find the largest element.
 
 (d) O(h) where h is the height of the tree. The worst case is also the average
-    case beacuse the algorithm must travel all the right nodes. 
+    case because the algorithm must travel all the right nodes. The worst case
+    in terms of number of nodes n is O(n). If the tree was created using sorted
+    data, the tree will just become a fancy linked list.
 
 
 [ Appendix A ]
