@@ -1,5 +1,6 @@
 Question 1
--------------------------------------------------------------------------------
+_______________________________________________________________________________
+
 I wrote the following Python program to generate graphs from a given adjacency
 matrix (it uses dot to generate graphs). 
 
@@ -182,8 +183,35 @@ toplogy
      worst case time effciency of all the sub routines. This total is about
      3n^2. So the worst case time effciency for TOPOLOGY_TYPE is also O(n^2).
 
+Question 2
+_______________________________________________________________________________
 
-Question 4
+
+Question 3
+_______________________________________________________________________________
+
+(note: for this question I'm assuming that 'comparison' mean key comparisons
+and not l <= r comparison)
+
+(a) False. The first comparison will be made against A[5]
+
+(b) The largest number of comparisons required to find any element in the list
+    is 4 comparisons.
+
+(c) Values 13, 28, 57, 92 and 97 require the largest number of comparisons.
+
+(d) 4 comparisons will be made before it can conclude element 58 does not exist
+
+
+
+Question 5
+_______________________________________________________________________________
+
+
+
+
+
+Question 5
 _______________________________________________________________________________
 
 - This is my implementation of Johnson-Trotter algorithm in Python:
