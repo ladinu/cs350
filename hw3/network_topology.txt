@@ -204,8 +204,16 @@ and not l <= r comparison)
 
 
 
-Question 5
+Question 4
 _______________________________________________________________________________
+
+- Suppose we want to find element K and that K is the last element in the array
+  of 38000 elements. Because linear search start from one end of the array and
+  continue to the other end untill the element is found, sequential search would
+  make n comparisons in this case.
+
+- 
+
 
 
 
@@ -511,6 +519,24 @@ _______________________________________________________________________________
          > perms/8.txt contain 40320 permutations
          > perms/9.txt contain 362880 permutations
          > perms/10.txt contain 3628800 permutations
+
+Question 6
+_______________________________________________________________________________
+
+(a) The following is an algorithm that find the largest key in a binary search
+    tree. For the algorithm, I'm assuming the largest value is always on the
+    right side of the tree 
+
+         // Input: Pointer to the root of the binary tree
+         // Output: The largest key in the binary tree
+         function FIND_LARGEST_KEY(root)
+            largestNode = root
+
+            while largestNode.right exist:
+               largestNode = largestNode.right
+
+            return largestNode.value
+(b) 
 
 
 
