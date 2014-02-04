@@ -537,7 +537,12 @@ _______________________________________________________________________________
 
             return largestNode.value
 (b) 
-
+(c) 
+(d) The worst case for a binary search tree in general is when the tree does
+    not contain any left nodes i.e the input list is already sorted from smallest
+    to largest. In this case, the binary search tree is just a fancy linked list.
+    Now, finding the greatest key turns into a sequential search with the largest
+    element being the last eelement in the linked list.
 
 
 [ Appendix A ]
