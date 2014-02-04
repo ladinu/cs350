@@ -3,23 +3,23 @@ Question 1
 I wrote the following Python program to generate graphs from a given adjacency
 matrix (it uses dot to generate graphs). 
 
-#!/usr/bin/env python
-import pydot as dot
+      #!/usr/bin/env python
+      import pydot as dot
 
-def genGraph(matrix):
-   graph = dot.Dot(graph_type='digraph')
-   nodes = []
-   for row_idx, row in enumerate(matrix):
-      node = dot.Node("%i" % row_idx)
-      graph.add_node(node)
-      nodes.append(node)
+      def genGraph(matrix):
+         graph = dot.Dot(graph_type='digraph')
+         nodes = []
+         for row_idx, row in enumerate(matrix):
+            node = dot.Node("%i" % row_idx)
+            graph.add_node(node)
+            nodes.append(node)
 
-   for row_idx, row in enumerate(matrix):
-      for column_idx, element in enumerate(row):
-         if element:
-            graph.add_edge(dot.Edge(nodes[row_idx], nodes[column_idx]))
+         for row_idx, row in enumerate(matrix):
+            for column_idx, element in enumerate(row):
+               if element:
+                  graph.add_edge(dot.Edge(nodes[row_idx], nodes[column_idx]))
 
-   graph.write_png("out.png")
+         graph.write_png("out.png")
 
 I noticed the following patterns when generating graphs for the given network
 topologies (star, ring, all connected)
@@ -60,6 +60,10 @@ topologies (star, ring, all connected)
                   if A[i, j] \= 0 then return false 
              return true
 
+      - The time effciency of this algorithm O(n^2). This is beacuse the
+        algorithm has 2 for loops and the second for loop is nested inside the
+        first. 
+
    ring
       - In this type of network, the first node is connected to the second node
         and second node is connected to the third node and so on until last
@@ -93,6 +97,11 @@ topologies (star, ring, all connected)
                      if A[i, j] \= 0 then return false
             return true
 
+      - The time effciency of this algorithm is clearly O(n^2). The algorithm
+        has two for loops, one nested inside the other. There are 2 basic
+        operations (comparision) for each iteration. This operation is executed 2n^2
+        times. Hence the algorithm is O(n^2)
+
    all connected
       - As name implies, all the nodes are connected to each other. Each node
         will have n incomming edges. Beacuse none of the nodes are connected to
@@ -118,6 +127,11 @@ topologies (star, ring, all connected)
                   else
                      if A[i, j] \= 1 then reutrn false
             return true
+
+      - The time effciency for this algorithm, like before, is O(n^2). The
+        comparision operation get exectued twice for each iteration and there
+        are n^2 iterations. This mean the basic operation get executed 2n^2 times. Thus
+        the algorithm is O(n^2).
 
 By combining all the algorithms given above, the following algorithm check if a
 given n by n adjacency matrix represnt a star, ring or all connetcted network
@@ -163,6 +177,11 @@ toplogy
          return ALL_CONNECTED
       else
          return UNKNOWN
+
+   - The worst case time effciency for TOPOLOGY_TYPE is going to be the sum of
+     worst case time effciency of all the sub routines. This total is about
+     3n^2. So the worst case time effciency for TOPOLOGY_TYPE is also O(n^2).
+
 
 Question 4
 _______________________________________________________________________________
