@@ -100,8 +100,8 @@ topologies (star, ring, all connected)
 
       - The time effciency of this algorithm is clearly O(n^2). The algorithm
         has two for loops, one nested inside the other. There are 2 basic
-        operations (comparision) for each iteration. This operation is executed 2n^2
-        times. Hence the algorithm is O(n^2)
+        operations (comparision) for each iteration. This operation is executed
+        2n^2 times. Hence the algorithm is O(n^2)
 
    all connected
       - As name implies, all the nodes are connected to each other. Each node
@@ -131,8 +131,8 @@ topologies (star, ring, all connected)
 
       - The time effciency for this algorithm, like before, is O(n^2). The
         comparision operation get exectued twice for each iteration and there
-        are n^2 iterations. This mean the basic operation get executed 2n^2 times. Thus
-        the algorithm is O(n^2).
+        are n^2 iterations. This mean the basic operation get executed 2n^2
+        times. Thus the algorithm is O(n^2).
 
 By combining all the algorithms given above, the following algorithm check if a
 given n by n adjacency matrix represnt a star, ring or all connetcted network
@@ -207,17 +207,18 @@ and not l <= r comparison)
 Question 4
 _______________________________________________________________________________
 
-- Suppose we want to find element K and that K is the last element in the array
-  of 38000 elements. Because linear search start from one end of the array and
-  continue to the other end untill the element is found, sequential search would
-  make n comparisons in this case.
+- Average case depend on the type of input. For this problem, I will assume the
+  input is uniformly distributed.
 
-- 
+- Beacuse average case time effciency of sequential search is O(n), on average
+  it will take about 19000 comparisons to find a key. This number is obtained
+  by summing all the comparision needed for finding each element in 38000
+  element list and dividing them by 38000.
 
+- The average case for binary seach is log2(n). log2(38000) = 15.2 ~= 16 
 
-
-
-
+- Now 19000 / 16 = 1187.5 ~= 1188. So binary search is 1188 times faster than
+  sequential search in the average case.
 
 Question 5
 _______________________________________________________________________________
@@ -530,21 +531,21 @@ _______________________________________________________________________________
          // Input: Pointer to the root of the binary tree
          // Output: The largest key in the binary tree
          function FIND_LARGEST_KEY(root)
-            largestNode = root
+            currentNode = root
 
-            while largestNode.right exist:
-               largestNode = largestNode.right
+            while currentNode.right exist:
+               currentNode = currentNode.right
 
-            return largestNode.value
-(b) 
-(c) 
-(d) The worst case for a binary search tree in general is when the tree does
-    not contain any left nodes i.e the input list is already sorted from smallest
-    to largest. In this case, the binary search tree is just a fancy linked list.
-    Now, finding the greatest key turns into a sequential search with the largest
-    element being the last element in the linked list. Beacuse the worst case
-    time effciency of sequential search is O(n), the worst case for the algorithm
-    in part (a) is also O(n).
+            return currentNode.value
+
+(b) Yes. In each iteration, search space is halved
+
+(c) On the average case the time effciency is O(h) where h is the height of the
+    tree. This is beacuse the algorithm has to always travel to the right most
+    end of the tree to find the largest element.
+
+(d) O(h) where h is the height of the tree. The worst case is also the average
+    case beacuse the algorithm must travel all the right nodes. 
 
 
 [ Appendix A ]
