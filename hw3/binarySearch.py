@@ -23,9 +23,9 @@ a = [5, 13, 19, 23, 28, 30, 49, 57, 89, 92, 94, 97]
 
 compList = []
 
-for i in a:
-   print "searched for " + str(i) + " got comparisons " + str(bs(a, i)[1]) 
-
-print
+#for i in a:
+#   print "searched for " + str(i) + " got comparisons " + str(bs(a, i)[1]) 
+#
+#print
 print "searched for " + str(58) + " got comparisons " + str(bs(a, 58)[1]) 
 

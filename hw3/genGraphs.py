@@ -2,7 +2,7 @@
 import pydot as dot
 
 def genGraph(matrix):
-   graph = dot.Dot(graph_type='digraph')
+   graph = dot.Dot(graph_type='graph')
    nodes = []
    for row_idx, row in enumerate(matrix):
       node = dot.Node("%i" % row_idx)
@@ -17,19 +17,19 @@ def genGraph(matrix):
    return graph
 
 
-star = [[0, 1, 1],
-        [1, 0, 0],
+star = [[0, 1, 0],
+        [0, 0, 1],
         [1, 0, 0]]
 
-ring = [[0, 1, 0, 1],
-        [1, 0, 1, 0],
-        [0, 1, 0, 1],
-        [1, 0, 1, 0]]
+ring = [[0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1],
+        [1, 0, 0, 0]]
 
 allConnected = [[0, 1, 1, 1],
                 [1, 0, 1, 1],
                 [1, 1, 0, 1],
                 [1, 1, 1, 0]]
 
-genGraph(star).write_png("out.png")
+genGraph(ring).write_png("out.png")
 
