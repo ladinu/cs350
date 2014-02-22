@@ -1,0 +1,18 @@
+
+A = {a1, a2, a3, ..., a_n}
+B = {b1, b2, b3, ..., b_m}
+
+a) The algorithm compare every element in A with every element in B. If an
+   element in A and B are the same, that element is added to set C. The
+   efficiency class for the following algorithm is O(nm).
+
+      function SUBSET(A, B)
+         // Input: Set A and B with n and m elements
+         // Output: Intersection of A and B
+         C = {}
+         for i=1 to n do
+            for j=1 to m do
+               if A[i] == B[j] then 
+                  C.add(A[i])
+         return C
+b) 
