@@ -15,4 +15,55 @@ a) The algorithm compare every element in A with every element in B. If an
                if A[i] == B[j] then 
                   C.add(A[i])
          return C
-b) 
+
+b) The following algorithm uses merge sort to solve the problem of finding the
+   subset of A and B. Create new list C which contain all elements of set A and B
+   (note that list C can have duplicate items). Sort list C using merge sort. Walk
+   down list C and find duplicates.
+
+      function SUBSET(A, B)
+         // Input: Set A and B with n and m elements
+         // Output: Intersection of A and B
+         D = {}
+         C = makeListFromSets(A, B)
+         C = mergeSort(C)
+         n = len(C)
+
+         for i=1 to n - 1 do
+            j = i + 1
+            if C[i] == C[j] then
+               D.add(C[i])
+         return D    
+
+   The worst case efficiency class of mergeSort is O(n log n). There are n+m
+   elements in list C. To sort list C by mergesort, (n+m) log (n+m) operations are
+   needed in the worst case. After list C is sorted, we walk down the list and
+   compare each element with the next element. In this loop (n+m) - 1 comparisons
+   are made. The total operations made by SUBSET is (n+m) log (n+m) + (n+m) -1
+   which is about 2(n+m) log(n+m). By the number of operations made by SUBSET in
+   the worst case, the time efficiency is O(n+m log n+m)
+
+
+---i=0, r=0  : s=None
+--------i=2, r=1  : s=None
+--------i=3, r=3  : s=None
+----i=2, r=3  : s=2
+--i=0, r=3  : s=1
+----i=5, r=5  : s=None
+----i=7, r=7  : s=None
+--i=5, r=7  : s=6
+-i=0, r=7  : s=4
+
+
+--i=0, r=-1  : s=None
+----------------i=1, r=1  : s=None
+----------------i=3, r=2  : s=None
+--------i=1, r=2  : s=2
+--------i=4, r=3  : s=None
+----i=1, r=3  : s=3
+--------i=5, r=5  : s=None
+--------i=7, r=7  : s=None
+----i=5, r=7  : s=6
+--i=1, r=7  : s=4
+-i=0, r=7  : s=0
+
